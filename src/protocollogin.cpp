@@ -119,13 +119,10 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	}
 
 	//Add premium days
-	output->addByte(0);
 	if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
-		output->addByte(1);
-		output->add<uint32_t>(0);
+		output->add<uint16_t>(0xFFFF); //client displays free premium
 	} else {
-		output->addByte(account.premiumDays > 0 ? 1 : 0);
-		output->add<uint32_t>(time(nullptr) + (account.premiumDays * 86400));
+		output->add<uint16_t>(account.premiumDays);
 	}
 
 	send(output);
